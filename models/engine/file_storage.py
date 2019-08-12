@@ -64,6 +64,7 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """ holi soy un comentario """
         for key, val in self.__objects.items():
             if obj == val:
                 del self.__objects[key]
