@@ -17,10 +17,10 @@ class DBStorage:
         env = os.getenvb(HBNB_ENV)
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}/{}'.format(user, password, host, db), pool_pre_ping=True)
-        Session = sessionmaker(bind=engine)
+        Base.metadata.create_all(self.__engine)
         self.__session = Session()
         if env == test:
-            for tbl in meta.sorted_tables:
+            for tbl in Base.metadata.sorted_tables:
                 tbl.drop(engine)
 
         def all(self, cls=None):
@@ -48,13 +48,16 @@ class DBStorage:
             self.__session.commit()
 
 
-        delete(self, obj=None):
+        def delete(self, obj=None):
             """delete"""
-            self.__session.delete(r)
+            self.__session.delete(obj)
             self.__session.commit()
 
 
-        reload(self):
-            self.__session = sessionmaker(bind=self.__session)
-            self.__session = scoped_session(self.__session, expire_on_commit=True)
+        def reload(self):
+            """reload"""
+            # reload all
+            session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+            S = scoped_session(session)
+            self.__session = S()
             
