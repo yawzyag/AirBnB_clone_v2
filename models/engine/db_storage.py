@@ -20,9 +20,7 @@ class DBStorage:
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}/{}'.format(user, password, host, db),
             pool_pre_ping=True)
-        Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
+        Base.metadata.create_all(self.__engine)        
         if env == "test":
             for tbl in Base.metadata.sorted_tables:
                 tbl.drop(engine)
@@ -50,6 +48,7 @@ class DBStorage:
 
     def save(self):
         """adding save"""
+        print("aca---")
         self.__session.commit()
 
     def delete(self, obj=None):
@@ -59,6 +58,9 @@ class DBStorage:
 
     def reload(self):
         """reload"""
+        print("db reload")
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         S = scoped_session(session)
+        print("this is the session ", S)
         self.__session = S()
+        self.save()
