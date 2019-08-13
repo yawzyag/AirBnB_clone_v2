@@ -27,16 +27,15 @@ class DBStorage:
 
     def all(self, cls=None):
         dict = {}
+        print(cls)
         if cls:
             s = self.__session.query(cls).all()
             for val in s:
                 dict = {"{}.{}".format(cls.__name__, val.id): val}
         else:
-            print("table of engines: ", engine.table_names())
-            for table in engine.table_names():
+            for table in self.__engine.table_names():
                 for val in table:
                     dict = {"{}.{}".format(cls.__name__, val.id): val}
-        print("----")
         print(dict)
         return dict
 
@@ -44,11 +43,10 @@ class DBStorage:
         """new to database"""
         self.__session.add(obj)
         self.__session.commit()
-        print("line 50 this is the id in new db: ", new.id)
+
 
     def save(self):
         """adding save"""
-        print("aca---")
         self.__session.commit()
 
     def delete(self, obj=None):
@@ -58,9 +56,8 @@ class DBStorage:
 
     def reload(self):
         """reload"""
-        print("db reload")
+        Base.metadata.bind = self.__engine
+        Base.metadata.create_all()
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         S = scoped_session(session)
-        print("this is the session ", S)
         self.__session = S()
-        self.save()
