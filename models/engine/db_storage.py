@@ -15,6 +15,7 @@ class DBStorage:
     __session = None
 
     def __init__(self):
+        """ this is the init """
         user = os.getenv("HBNB_MYSQL_USER")
         password = os.getenv("HBNB_MYSQL_PWD")
         host = os.getenv("HBNB_MYSQL_HOST")
@@ -29,6 +30,7 @@ class DBStorage:
                 tbl.drop(engine)
 
     def all(self, cls=None):
+        """ this is a comment """
         dict = {}
         if cls:
             s = self.__session.query(cls).all()
