@@ -27,11 +27,10 @@ class DBStorage:
 
     def all(self, cls=None):
         dict = {}
-        print(cls)
         if cls:
             s = self.__session.query(cls).all()
             for val in s:
-                dict = {"{}.{}".format(cls.__name__, val.id): val}
+                dict.update({"{}.{}".format(cls.__name__, val.id): val})
         else:
             for table in self.__engine.table_names():
                 for val in table:
