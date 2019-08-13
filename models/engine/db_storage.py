@@ -4,6 +4,9 @@ import os
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
+from models.state import State
+from models.city import City
+from sqlalchemy import inspect
 
 
 class DBStorage:
@@ -20,7 +23,7 @@ class DBStorage:
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}/{}'.format(user, password, host, db),
             pool_pre_ping=True)
-        Base.metadata.create_all(self.__engine)        
+        Base.metadata.create_all(self.__engine)
         if env == "test":
             for tbl in Base.metadata.sorted_tables:
                 tbl.drop(engine)
@@ -32,17 +35,21 @@ class DBStorage:
             for val in s:
                 dict.update({"{}.{}".format(cls.__name__, val.id): val})
         else:
-            for table in self.__engine.table_names():
-                for val in table:
-                    dict = {"{}.{}".format(cls.__name__, val.id): val}
-        print(dict)
+            # print(self.__session)
+            # for obj in self.__session:
+                # print(obj)
+            # print(inspector.get_table_names())
+            s = self.__session.query(State, City).all()
+            # print(Base.metadata.reflect())
+            for sta, cit in s:
+                dict.update({"{}.{}".format(type(sta).__name__, sta.id): sta})
+                dict.update({"{}.{}".format(type(cit).__name__, cit.id): cit})
         return dict
 
     def new(self, obj):
         """new to database"""
         self.__session.add(obj)
         self.__session.commit()
-
 
     def save(self):
         """adding save"""

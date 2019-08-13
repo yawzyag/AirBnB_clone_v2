@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
                 tmp[1] = tmp[1].replace('_', ' ')
                 try:
                     obj.__dict__[tmp[0]] = eval(tmp[1])
-                except:
+                except BaseException:
                     obj.__dict__[tmp[0]] = tmp[1]
             obj.save()
             print("{}".format(obj.id))
@@ -127,14 +127,15 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = storage.all(eval(line))
         my_list = []
         if not line:
+            objects = storage.all()
             for key in objects:
                 my_list.append(objects[key])
             print(my_list)
             return
         try:
+            objects = storage.all(eval(line))
             args = line.split(" ")
             if args[0] not in self.all_classes:
                 raise NameError()
@@ -219,15 +220,15 @@ class HBNBCommand(cmd.Cmd):
         new_list.append(args[0])
         try:
             my_dict = eval(
-                args[1][args[1].find('{'):args[1].find('}')+1])
+                args[1][args[1].find('{'):args[1].find('}') + 1])
         except Exception:
             my_dict = None
         if isinstance(my_dict, dict):
-            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+            new_str = args[1][args[1].find('(') + 1:args[1].find(')')]
             new_list.append(((new_str.split(", "))[0]).strip('"'))
             new_list.append(my_dict)
             return new_list
-        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+        new_str = args[1][args[1].find('(') + 1:args[1].find(')')]
         new_list.append(" ".join(new_str.split(", ")))
         return " ".join(i for i in new_list)
 
