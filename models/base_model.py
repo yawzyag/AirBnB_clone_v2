@@ -13,6 +13,9 @@ class BaseModel:
     for other classes
     """
 
+    id = Column(String(60), primary_key=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, nullable=False)
     def __init__(self, *args, **kwargs):
         """Instantiation of base model class
         Args:
@@ -30,9 +33,9 @@ class BaseModel:
                 if key != "__class__":
                     setattr(self, key, value)
         else:
-            self.id = Column(String(60), primary_key=True, nullable=False)
-            self.created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False) 
-            self.updated_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+            self.id = str(uuid.uuid4())
+            self.created_at = self.updated_at = datetime.now()
+
 
     def __str__(self):
         """returns a string
@@ -63,8 +66,8 @@ class BaseModel:
         my_dict["__class__"] = str(type(self).__name__)
         my_dict["created_at"] = self.created_at.isoformat()
         my_dict["updated_at"] = self.updated_at.isoformat()
-        if _sa_instance_state in my_dict.keys():
-            del my_dict[_sa_instance_state]
+        if "_sa_instance_state" in my_dict.keys():
+            del my_dict["_sa_instance_state"]
         return my_dict
 
     def delete(self):
