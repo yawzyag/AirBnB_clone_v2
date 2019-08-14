@@ -1,7 +1,22 @@
 #!/usr/bin/python3
 """This is the place class"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKeyi, Float
+from sqlalchemy import Table, Column, Integer, String, ForeignKey, Float
+from sqlalchemy.orm import relationship
+
+place_amenity = Table('PlaceAmenity', Base.metadata,
+                      Column(
+                          'place_id',
+                          String(60),
+                          ForeignKey("places.id"),
+                          primary_key=True,
+                          nullable=False),
+                      Column(
+                          'amenity_id',
+                          String(60),
+                          ForeignKey("amenities.id"),
+                          primary_key=True,
+                          nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -31,3 +46,34 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     amenity_ids = []
+    reviews = relationship("Review", backref="place")
+
+    @property
+    def reviews(self):
+        """ this a amazing commet """
+        review_list = []
+        for r in Place.reviews:
+            if r.place_id == self.id:
+                review_list += r
+        return review_list
+
+    amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        viewonly=False, backref="place")
+
+    @property
+    def amenities(self):
+        """ this a amazing commet """
+        review_amen = []
+        for r in Place.amenities:
+            for ame_id in self.amenity_ids:
+                if ame_id == r.amenity_id:
+                    review_list += r
+        return review_amen
+
+    @amenities.setter
+    def amenities(self, obj):
+        """ this is another comment """
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)

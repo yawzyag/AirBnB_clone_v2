@@ -6,7 +6,14 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.place import Place
+from models.user import User
+from models.amenity import Amenity
+from models.review import Review
 from sqlalchemy import inspect
+
+
+all_classes = {User, State, City, Review, Amenity, Place}
 
 
 class DBStorage:
@@ -37,19 +44,16 @@ class DBStorage:
             for val in s:
                 dict.update({"{}.{}".format(cls.__name__, val.id): val})
         else:
-            # print(self.__session)
-            # for obj in self.__session:
-                # print(obj)
-            # print(inspector.get_table_names())
-            s = self.__session.query(State, City).all()
-            # print(Base.metadata.reflect())
-            for sta, cit in s:
-                dict.update({"{}.{}".format(type(sta).__name__, sta.id): sta})
-                dict.update({"{}.{}".format(type(cit).__name__, cit.id): cit})
+            for item in all_classes:
+                s = self.__session.query(item).all()
+                for sta in s:
+                    dict.update(
+                        {"{}.{}".format(type(sta).__name__, sta.id): sta})
         return dict
 
     def new(self, obj):
         """new to database"""
+        print("en new obj: " + str(obj))
         self.__session.add(obj)
         self.__session.commit()
 

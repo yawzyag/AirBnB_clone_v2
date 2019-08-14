@@ -5,6 +5,7 @@ import models
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
+import os
 
 Base = declarative_base()
 
@@ -35,6 +36,7 @@ class BaseModel:
                 if key != "__class__":
                     setattr(self, key, value)
         else:
+            #if os.getenv("HBNB_TYPE_STORAGE") != "db":
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
 
