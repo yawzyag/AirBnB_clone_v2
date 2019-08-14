@@ -21,7 +21,8 @@ class State(BaseModel, Base):
         def cities(self):
             """cities"""
             cities = []
-            for c in State.cities:
-                if c.state_id == self.id:
-                    cities += c
+            for c, val in models.storage.all().items():
+                key = c.split(".")
+                if key[0] == "City" and val.state_id == str(self.id):
+                    cities.append(val)
             return cities
