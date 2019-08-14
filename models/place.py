@@ -5,7 +5,7 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
 
-place_amenity = Table('PlaceAmenity', Base.metadata,
+place_amenity = Table('place_amenity', Base.metadata,
                       Column(
                           'place_id',
                           String(60),
@@ -51,11 +51,12 @@ class Place(BaseModel, Base):
 
     @property
     def reviews(self):
-        """ this a amazing commet """
+        """ this an amazing commet """
         review_list = []
-        for r in Place.reviews:
-            if r.place_id == self.id:
-                review_list += [r]
+        for c, val in models.storage.all().items():
+            key = c.split(".")
+            if key[0] == "Review" and val.place_id == str(self.id):
+                review_list.append(val)
         return review_list
 
     amenities = relationship(
@@ -65,12 +66,14 @@ class Place(BaseModel, Base):
 
     @property
     def amenities(self):
-        """ this a amazing commet """
+        """ this an amazing commet """
         review_amen = []
-        for r in Place.amenities:
-            for ame_id in self.amenity_ids:
-                if ame_id == r.amenity_id:
-                    review_list += r
+        for c, val in models.storage.all().items():
+            key = c.split(".")
+            if key[0] == "Amenity":
+                for item in self.amenity_ids:
+                    if item == key[1]:
+                        review_amen.append(val)
         return review_amen
 
     @amenities.setter

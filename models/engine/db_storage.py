@@ -7,13 +7,16 @@ from models.base_model import Base
 from models.state import State
 from models.city import City
 from models.user import User
-from sqlalchemy import inspect
+from models.review import Review
+from models.amenity import Amenity
+from models.place import Place
 
 
 class DBStorage:
     """this is a class"""
     __engine = None
     __session = None
+    all_classes = {User, State, City, Review, Amenity, Place}
 
     def __init__(self):
         """ this is the init """
@@ -36,11 +39,11 @@ class DBStorage:
             for val in s:
                 dict.update({"{}.{}".format(cls.__name__, val.id): val})
         else:
-            s = self.__session.query(State, City, User).all()
-            for sta, cit, usr in s:
-                dict.update({"{}.{}".format(type(sta).__name__, sta.id): sta})
-                dict.update({"{}.{}".format(type(cit).__name__, cit.id): cit})
-                dict.update({"{}.{}".format(type(usr).__name__, usr.id): usr})
+            for item in self.all_classes:
+                s = self.__session.query(item).all()
+                for sta in s:
+                    dict.update(
+                        {"{}.{}".format(type(sta).__name__, sta.id): sta})
         return dict
 
     def new(self, obj):
