@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the place class"""
+import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
@@ -62,11 +63,12 @@ class Place(BaseModel, Base):
     amenities = relationship(
         "Amenity",
         secondary=place_amenity,
-        viewonly=False, backref="place")
+        viewonly=False,
+        back_populates="place_amenities")
 
-    @property
+"""    @property
     def amenities(self):
-        """ this an amazing commet """
+        \""" this an amazing commet "\""
         review_amen = []
         for c, val in models.storage.all().items():
             key = c.split(".")
@@ -78,6 +80,7 @@ class Place(BaseModel, Base):
 
     @amenities.setter
     def amenities(self, obj):
-        """ this is another comment """
+        \""" this is another comment "\""
         if isinstance(obj, Amenity):
             self.amenity_ids.append(obj.id)
+"""
