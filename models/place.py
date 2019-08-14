@@ -32,3 +32,13 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
+    reviews = relationship("Review", backref="place")
+
+    @property
+    def reviews(self):
+        """ this a amazing commet """
+        review_list = []
+        for r in Place.reviews:
+            if r.place_id == self.id:
+                review_list += [r]
+        return review_list
