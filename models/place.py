@@ -5,6 +5,21 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
 
+place_amenity = Table('PlaceAmenity', Base.metadata,
+                      Column(
+                          'place_id',
+                          String(60),
+                          ForeignKey("places.id"),
+                          primary_key=True,
+                          nullable=False),
+                      Column(
+                          'amenity_id',
+                          String(60),
+                          ForeignKey("amenities.id"),
+                          primary_key=True,
+                          nullable=False))
+
+
 class Place(BaseModel, Base):
     """This is the class for Place
     Attributes:
@@ -42,3 +57,24 @@ class Place(BaseModel, Base):
             if r.place_id == self.id:
                 review_list += [r]
         return review_list
+
+    amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        viewonly=False, backref="place")
+
+    @property
+    def amenities(self):
+        """ this a amazing commet """
+        review_amen = []
+        for r in Place.amenities:
+            for ame_id in self.amenity_ids:
+                if ame_id == r.amenity_id:
+                    review_list += r
+        return review_amen
+
+    @amenities.setter
+    def amenities(self, obj):
+        """ this is another comment """
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)
