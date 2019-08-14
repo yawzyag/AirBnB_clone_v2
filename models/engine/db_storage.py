@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.user import User
 from sqlalchemy import inspect
 
 
@@ -27,7 +28,7 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         if env == "test":
             for tbl in Base.metadata.sorted_tables:
-                tbl.drop(engine)
+                tbl.drop(self.__engine)
 
     def all(self, cls=None):
         """ this is a comment """
@@ -41,17 +42,17 @@ class DBStorage:
             # for obj in self.__session:
                 # print(obj)
             # print(inspector.get_table_names())
-            s = self.__session.query(State, City).all()
+            s = self.__session.query(State, City, User).all()
             # print(Base.metadata.reflect())
-            for sta, cit in s:
+            for sta, cit, usr in s:
                 dict.update({"{}.{}".format(type(sta).__name__, sta.id): sta})
                 dict.update({"{}.{}".format(type(cit).__name__, cit.id): cit})
+                dict.update({"{}.{}".format(type(usr).__name__, usr.id): usr})
         return dict
 
     def new(self, obj):
         """new to database"""
         self.__session.add(obj)
-        self.__session.commit()
 
     def save(self):
         """adding save"""

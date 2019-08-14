@@ -4,6 +4,7 @@ import models
 from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
+import os
 
 
 class State(BaseModel, Base):
@@ -11,17 +12,16 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    name = ""
-    __tablename__ = "states"
-    id = Column(String(60), primary_key=True, nullable=False)
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state")
-
-    @property
-    def cities(self):
-        """cities"""
-        cities = []
-        for c in State.cities:
-            if c.state == self.id:
-                cities += c
-        return cities
+    __tablename__ = "states"
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        cities = relationship("City", backref="state")
+    else:
+        @property
+        def cities(self):
+            """cities"""
+            cities = []
+            for c in State.cities:
+                if c.state_id == self.id:
+                    cities += c
+            return cities
