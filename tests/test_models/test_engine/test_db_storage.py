@@ -39,6 +39,9 @@ class TestFileDBStorage(unittest.TestCase):
         except Exception:
             pass
 
+    @unittest.skipIf(
+        os.getenv("HBNB_TYPE_STORAGE") != "db",
+        "no for filestorage test")
     def test_create_entry(self):
         """ test create a new element """
         os.system("cat setup_mysql_test.sql | mysql -hlocalhost -uroot -proot")
@@ -55,6 +58,7 @@ class TestFileDBStorage(unittest.TestCase):
                     '2019-08-15T17:50:56.590977')""")
         number2 = cursor.execute("SELECT * FROM states")
         self.assertEqual(number1 + 1, number2)
+        connection.close()
 
     def test_pep8_FileStorage(self):
         """Tests pep8 style"""
