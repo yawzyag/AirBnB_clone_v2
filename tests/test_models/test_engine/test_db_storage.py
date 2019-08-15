@@ -41,6 +41,7 @@ class TestFileDBStorage(unittest.TestCase):
 
     def test_create_entry(self):
         """ test create a new element """
+        os.system("cat setup_mysql_test.sql | mysql -hlocalhost -uroot -proot")
         connection = SQLito.connect(
             'localhost',
             'hbnb_test',
