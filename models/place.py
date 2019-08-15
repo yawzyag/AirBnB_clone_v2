@@ -4,6 +4,7 @@ import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
+import os
 
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -49,6 +50,11 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     amenity_ids = []
     reviews = relationship("Review", backref="place")
+    amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        viewonly=False,
+        back_populates="place_amenities")
 
     @property
     def reviews(self):
@@ -60,27 +66,21 @@ class Place(BaseModel, Base):
                 review_list.append(val)
         return review_list
 
-    amenities = relationship(
-        "Amenity",
-        secondary=place_amenity,
-        viewonly=False,
-        back_populates="place_amenities")
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
+        @property
+        def amenities(self):
+            """ this an amazing commet """
+            review_amen = []
+            for c, val in models.storage.all().items():
+                key = c.split(".")
+                if key[0] == "Amenity":
+                    for item in self.amenity_ids:
+                        if item == key[1]:
+                            review_amen.append(val)
+            return review_amen
 
-"""    @property
-    def amenities(self):
-        \""" this an amazing commet "\""
-        review_amen = []
-        for c, val in models.storage.all().items():
-            key = c.split(".")
-            if key[0] == "Amenity":
-                for item in self.amenity_ids:
-                    if item == key[1]:
-                        review_amen.append(val)
-        return review_amen
-
-    @amenities.setter
-    def amenities(self, obj):
-        \""" this is another comment "\""
-        if isinstance(obj, Amenity):
-            self.amenity_ids.append(obj.id)
-"""
+        @amenities.setter
+        def amenities(self, obj):
+            """ this is another comment """
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
