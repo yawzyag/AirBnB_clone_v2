@@ -12,5 +12,5 @@ class TestDataBase(unittest.TestCase):
     """this will test the console"""
     def test_filedb(self):
         """ test database """
-        test = os.system("../setup_mysql_dev.sql")
+        # test = os.system("./setup_mysql_dev.sql")
         pass
