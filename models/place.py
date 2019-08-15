@@ -49,24 +49,24 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    reviews = relationship("Review", backref="place")
-    amenities = relationship(
-        "Amenity",
-        secondary=place_amenity,
-        viewonly=False,
-        back_populates="place_amenities")
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", backref="place")
+        amenities = relationship(
+            "Amenity",
+            secondary=place_amenity,
+            viewonly=False,
+            back_populates="place_amenities")
+    else:
+        @property
+        def reviews(self):
+            """ this an amazing commet """
+            review_list = []
+            for c, val in models.storage.all().items():
+                key = c.split(".")
+                if key[0] == "Review" and val.place_id == str(self.id):
+                    review_list.append(val)
+            return review_list
 
-    @property
-    def reviews(self):
-        """ this an amazing commet """
-        review_list = []
-        for c, val in models.storage.all().items():
-            key = c.split(".")
-            if key[0] == "Review" and val.place_id == str(self.id):
-                review_list.append(val)
-        return review_list
-
-    if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def amenities(self):
             """ this an amazing commet """
