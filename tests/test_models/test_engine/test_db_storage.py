@@ -12,10 +12,11 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.engine.file_storage import FileStorage
+import MySQLdb as SQLito
 
 
-class TestFileStorage(unittest.TestCase):
-    '''this will test the FileStorage'''
+class TestFileDBStorage(unittest.TestCase):
+    '''this will test the DBStorage'''
 
     @classmethod
     def setUpClass(cls):
@@ -37,6 +38,22 @@ class TestFileStorage(unittest.TestCase):
             os.remove("file.json")
         except Exception:
             pass
+
+    def test_create_entry(self):
+        """ test create a new element """
+        connection = SQLito.connect(
+            'localhost',
+            'hbnb_test',
+            'hbnb_test_pwd',
+            'hbnb_test_db')
+        cursor = connection.cursor()
+        number1 = cursor.execute("SELECT * FROM states")
+        cursor.execute(
+            """INSERT INTO states(name, id, created_at, updated_at) VALUES\
+                    ('California', '123456678', '2019-08-15T17:50:56.590977',\
+                    '2019-08-15T17:50:56.590977')""")
+        number2 = cursor.execute("SELECT * FROM states")
+        self.assertEqual(number1 + 1, number2)
 
     def test_pep8_FileStorage(self):
         """Tests pep8 style"""
@@ -74,7 +91,7 @@ class TestFileStorage(unittest.TestCase):
             lines = f.readlines()
         try:
             os.remove(path)
-        except:
+        except BaseException:
             pass
         self.storage.save()
         with open(path, 'r') as f:
@@ -82,7 +99,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(lines, lines2)
         try:
             os.remove(path)
-        except:
+        except BaseException:
             pass
         with open(path, "w") as f:
             f.write("{}")
