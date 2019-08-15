@@ -43,7 +43,7 @@ class TestFileDBStorage(unittest.TestCase):
         os.getenv("HBNB_TYPE_STORAGE") != "db",
         "no for filestorage test")
     def test_create_entry(self):
-        """ test create a new element """
+        """ test create a new element in the db"""
         os.system("cat setup_mysql_test.sql | mysql -hlocalhost -uroot -proot")
         connection = SQLito.connect(
             'localhost',
