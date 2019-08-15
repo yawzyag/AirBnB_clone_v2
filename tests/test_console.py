@@ -72,6 +72,7 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("quit")
             self.assertEqual('', f.getvalue())
 
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "no for db test")
     def test_create(self):
         """Test create command inpout"""
         with patch('sys.stdout', new=StringIO()) as f:
@@ -88,6 +89,12 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("all User")
             self.assertEqual(
                 "[[User]", f.getvalue()[:7])
+
+    # def test_createdb(self):
+    #    with patch('sys.stdout', new=StringIO()) as f:
+    #       self.consol.onecmd("create State name=\"California\"")
+    #       self.assertEqual(
+    #           "[[State]", f.getvalue()[:8])
 
     def test_show(self):
         """Test show command inpout"""
@@ -209,6 +216,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** no instance found **\n", f.getvalue())
 
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db", "no for db test")
     def test_update(self):
         """Test alternate destroy command inpout"""
         with patch('sys.stdout', new=StringIO()) as f:
