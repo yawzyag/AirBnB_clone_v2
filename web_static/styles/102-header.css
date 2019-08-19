@@ -1,0 +1,25 @@
+header {
+  background-color: white;
+  width: 100%;
+  align-content: center;
+  border-bottom: 1px solid #cccccc;
+  background-image: url("../images/logo.png");
+  background-repeat: no-repeat;
+}
+
+@media only screen and (min-width: 1000px) {
+  /* styles for browsers less than 1000px; */
+
+  header {
+    height: 70px;
+    background-position: 20px center;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* styles for browsers less than 1000px; */
+  header {
+    height: 60px;
+    background-position: 15px center;
+  }
+}
