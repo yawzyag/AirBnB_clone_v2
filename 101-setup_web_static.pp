@@ -22,8 +22,12 @@ ensure => 'installed',
 } -> -> file_line { 'Edit redirect':
 ensure => present,
 path   => '/etc/nginx/sites-enable/default',
-line   => "       location / {
-       add_header X-Served-By ${hostname};",
-match  => '^\tlocation / {',
+line   => "	#error_page 404 /404.html;
+       location /hbnb_static/ {
+       		alias /data/web_static/current/;
+	}",
+match  => '^\t#error_page 404 /404.html;',
+} ->  exec { 'restart':
+command => '/usr/sbin/service nginx restart',
 }
 
