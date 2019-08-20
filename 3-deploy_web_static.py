@@ -10,7 +10,7 @@ def do_pack():
     """making a file"""
     local("sudo mkdir -p versions")
     name_archive = "versions/web_static_{}.tgz".format(
-        datetime.now().strftime("%Y%m%d%H%M%S".encode('utf-8')))
+        datetime.now().strftime("%Y%m%d%H%M%S"))
     local("sudo tar -zvcf {} web_static".format(name_archive))
     return name_archive
 
