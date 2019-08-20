@@ -18,7 +18,6 @@ def do_pack():
 def do_deploy(archive_path):
     """deploying"""
     if exists(archive_path) is False:
-        print("no exists")
         return False
     try:
         put(archive_path, "/tmp/")
@@ -29,11 +28,13 @@ def do_deploy(archive_path):
         run("tar -xvzf /tmp/{}.tgz -C {}/".format(file_arc, path))
         run("sudo rm /tmp/{}".format(archive_path.split("/")[1]))
         run("sudo rm /data/web_static/current")
-        run("sudo ln -sf /data/web_static/releases/{} /data/web_static/current".format(file_arc))
-        run("sudo mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}".
+        run("sudo ln -sf /data/web_static/releases/{}\
+        /data/web_static/current".
+            format(file_arc))
+        run("sudo mv /data/web_static/releases/{}/web_static/*\
+        /data/web_static/releases/{}".
             format(file_arc, file_arc))
         run("rm -rf /data/web_static/releases/{}/web_static/".format(file_arc))
         return True
-    except Exception as exe:
-        print("execption {}".format(exe))
+    except:
         return False
