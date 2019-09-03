@@ -10,5 +10,15 @@ def hello_HBNB():
     return 'Hello HBNB!'
 
 
+@app.route('/hbnb')
+def route_HBNB():
+    return 'HBNB'
+
+
+@app.route('/c/<text>')
+def text_HBNB(text):
+    return 'C {}'.format(text.replace("_", " "))
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
