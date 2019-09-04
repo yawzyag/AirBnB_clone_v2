@@ -6,6 +6,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+
 @app.route('/states')
 @app.route('/states/<id>')
 def hello_HBNB(id=None):
@@ -13,7 +14,7 @@ def hello_HBNB(id=None):
     states = list(all_states.values())
     result = None
 
-    if id != None:
+    if id is not None:
         state = "State.{}".format(id)
         if (state in all_states):
             states = [all_states[state]]
