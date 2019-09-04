@@ -11,7 +11,6 @@ app.url_map.strict_slashes = False
 def hello_HBNB():
     all_states = storage.all(State)
     states = list(all_states.values())
-#    states = sorted(states, key=lambda x: x.name)
 
     return render_template('8-cities_by_states.html', dicty=states)
 
