@@ -68,7 +68,7 @@
   margin: 0;
   display: none;
   max-height: 300px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .popover li {
