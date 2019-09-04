@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>AirBnB_clone</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/4-common.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/3-header.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/3-footer.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/6-filters.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/8-places.css') }}"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='images/icon.png') }}"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <header></header>
+    <div class="container">
+      <section class="filters">
+        <div class="locations">
+          <h3>States</h3>
+          <h4>&nbsp;</h4>
+          <div class="popover">
+            <ul>
+              {% for state in states|sort(attribute='name') %}
+              <li>
+                <h2>{{ state.name }}</h2>
+                <ul>
+                  {% for city in state.cities|sort(attribute='name') %}
+                  <li>{{ city.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <h4>&nbsp;</h4>
+          <div class="popover">
+            <ul>
+              {% for ame in amenities|sort(attribute='name') %}
+              <li>{{ ame.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <button>Search</button>
+      </section>
+      <section class="places">
+        <h1>Places</h1>
+        <div class="articles">
+          <article>
+            <h2>casita</h2>
+            <div class="price_by_night">
+              $80
+            </div>
+            <hr />
+            <div class="information">
+              <div class="max_guest">
+                <div class="image1"></div>
+                <p>2 Guest</p>
+              </div>
+              <div class="number_rooms">
+                <div class="image2"></div>
+                <p>2 Guest</p>
+              </div>
+              <div class="number_bathrooms">
+                <div class="image3"></div>
+                <p>2 Guest</p>
+              </div>
+            </div>
+            <hr />
+            <div class="user">
+              <p><strong>Owner: </strong> Lorem ipsum</p>
+            </div>
+            <div class="description">
+              <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt
+                omnis quibusdam, vel eaque deserunt doloremque nemo dolore
+                soluta, quisquam sed architecto repellat aperiam nobis cumque
+                error amet delectus, ab fugit!
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+    <footer>
+      Holberton School
+    </footer>
+  </body>
+</html>

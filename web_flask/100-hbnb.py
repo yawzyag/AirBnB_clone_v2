@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 
-@app.route('/hbnb_filters')
+@app.route('/states')
 def hello_HBNB():
     all_states = storage.all(State)
     states = list(all_states.values())
