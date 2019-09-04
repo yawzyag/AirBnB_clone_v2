@@ -8,11 +8,19 @@ app.url_map.strict_slashes = False
 
 @app.route('/states')
 @app.route('/states/<id>')
-def hello_HBNB():
+def hello_HBNB(id=None):
     all_states = storage.all(State)
     states = list(all_states.values())
+    result = None
 
-    return render_template('9-states.html', dicty=states)
+    if id != None:
+        state = "State.{}".format(id)
+        if (state in all_states):
+            states = [all_states[state]]
+            result = all_states[state].name
+
+    return render_template('9-states.html', dicty=states,
+                           id=id, result=result)
 
 
 @app.teardown_appcontext
