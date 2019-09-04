@@ -35,23 +35,17 @@
           <h3>States</h3>
           <h4>&nbsp;</h4>
           <div class="popover">
-            <ul>
+	    <ul>
+	      {% for state in states|sort(attribute='name') %}
               <li>
-                <h2>Cosas:</h2>
+                <h2>{{ state.name }}</h2>
                 <ul>
-                  <li>Apple</li>
-                  <li>Pear</li>
-                  <li>Organge</li>
+		  {% for city in state.cities|sort(attribute='name') %}
+                  <li>{{ city.name }}</li>
+		  {% endfor %}
                 </ul>
               </li>
-              <li>
-                <h2>Cosas:</h2>
-                <ul>
-                  <li>Apple</li>
-                  <li>Pear</li>
-                  <li>Organge</li>
-                </ul>
-              </li>
+	      {% endfor %}
             </ul>
           </div>
         </div>
@@ -60,9 +54,9 @@
           <h4>&nbsp;</h4>
           <div class="popover">
             <ul>
-              <li>Apple</li>
-              <li>Pear</li>
-              <li>Organge</li>
+	      {% for ame in amenities|sort(attribute='name') %}
+              <li>{{ ame.name }}</li>
+	      {% endfor %}
             </ul>
           </div>
         </div>
