@@ -69,39 +69,42 @@
       <section class="places">
         <h1>Places</h1>
         <div class="articles">
-          <article>
-            <h2>casita</h2>
-            <div class="price_by_night">
-              $80
+          {% for place in places|sort(attribute='name') %}
+	  <article>
+            <div class="price_div">
+              <h2>{{ place.name }}</h2>
+              <div class="price_by_night">
+                ${{ place.price_by_night }}
+              </div>
             </div>
-            <hr />
+	    <hr />
             <div class="information">
               <div class="max_guest">
                 <div class="image1"></div>
-                <p>2 Guest</p>
+                <p>{{ place.max_guest }} Guest</p>
               </div>
               <div class="number_rooms">
                 <div class="image2"></div>
-                <p>2 Guest</p>
+                <p>{{ place.number_rooms }} Guest</p>
               </div>
               <div class="number_bathrooms">
                 <div class="image3"></div>
-                <p>2 Guest</p>
+                <p>{{ place.number_bathrooms }} Guest</p>
               </div>
             </div>
             <hr />
             <div class="user">
-              <p><strong>Owner: </strong> Lorem ipsum</p>
-            </div>
+	      {% for user in users|sort(attribute='first_name') %}
+	      {% if user.id == place.user_id -%}
+              <p><strong>Owner: </strong> {{ user.first_name }} {{ user.last_name }}</p>
+	      {%- endif %}
+              {% endfor %}
+	    </div>
             <div class="description">
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt
-                omnis quibusdam, vel eaque deserunt doloremque nemo dolore
-                soluta, quisquam sed architecto repellat aperiam nobis cumque
-                error amet delectus, ab fugit!
-              </p>
+              <p>{{ place.description|safe }}</p>
             </div>
           </article>
+	  {% endfor %}
         </div>
       </section>
     </div>
